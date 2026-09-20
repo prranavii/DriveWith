@@ -1,0 +1,15 @@
+{
+  "name": "drivewith-platform",
+  "version": "1.0.0",
+  "description": "DriveWith — AI-Powered Personal Driver Orchestration Platform Root Workspace",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build && cd ../backend && npm run build",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "start": "cd backend && npm run start",
+    "test": "cd backend && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
