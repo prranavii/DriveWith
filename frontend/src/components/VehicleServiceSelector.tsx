@@ -102,10 +102,10 @@ export const VehicleServiceSelector: React.FC<VehicleServiceSelectorProps> = ({
           </p>
         </div>
 
-        {/* Top-Right Progress Indicator & Action */}
-        <div className="flex items-center gap-6">
+        {/* Top-Right Progress Indicator & View All Action */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
           {/* Subtle Progress Bar */}
-          <div className="hidden sm:flex items-center gap-2.5 text-xs font-bold">
+          <div className="hidden lg:flex items-center gap-2.5 text-xs font-bold">
             <div className="flex items-center gap-1.5 text-neutral-400">
               <span className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center text-[11px] font-bold">1</span>
               <span>Location</span>
@@ -126,6 +126,14 @@ export const VehicleServiceSelector: React.FC<VehicleServiceSelectorProps> = ({
               <span>Confirm</span>
             </div>
           </div>
+
+          <button
+            type="button"
+            className="text-xs font-bold text-black hover:underline flex items-center gap-1 transition"
+          >
+            <span>View All</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
 
       </div>
