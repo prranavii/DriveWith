@@ -515,11 +515,20 @@ export const CustomerDashboard: React.FC = () => {
         </button>
       </div>
 
-      {/* Modals & Dialogs */}
       {showAiConcierge && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="max-w-2xl w-full">
-            <AiConciergeWidget onClose={() => setShowAiConcierge(false)} />
+            <AiConciergeWidget
+              onClose={() => setShowAiConcierge(false)}
+              onBookingCreated={(booking) => {
+                setShowAiConcierge(false);
+                handleConfirmBookingRecord(booking);
+              }}
+              onOpenPassport={(drv) => {
+                setReportDriver(drv);
+                setShowAiConcierge(false);
+              }}
+            />
           </div>
         </div>
       )}
