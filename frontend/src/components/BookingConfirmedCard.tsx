@@ -18,17 +18,17 @@ export const BookingConfirmedCard: React.FC<BookingConfirmedCardProps> = ({
       {/* Top Banner: Success Badge & Booking ID */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center font-bold">
-            <CheckCircle2 className="w-7 h-7" />
+          <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold">
+            <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-extrabold text-slate-900">Booking Confirmed!</h2>
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+              <h2 className="text-xl font-extrabold text-black">Booking Confirmed</h2>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-neutral-100 text-black border border-neutral-200">
                 {booking.bookingType}
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-mono mt-0.5">Booking ID: {booking.id}</p>
+            <p className="text-xs text-neutral-500 font-mono mt-0.5">Booking ID: {booking.id}</p>
           </div>
         </div>
 

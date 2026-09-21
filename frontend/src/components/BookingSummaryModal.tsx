@@ -24,7 +24,6 @@ export const BookingSummaryModal: React.FC<BookingSummaryModalProps> = ({
 }) => {
   const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
-  const [specialNotes, setSpecialNotes] = useState('');
 
   if (!driver) return null;
 
@@ -46,142 +45,103 @@ export const BookingSummaryModal: React.FC<BookingSummaryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 animate-fadeIn max-h-[90vh] overflow-y-auto text-slate-900">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white border border-[#E5E7EB] rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 animate-fadeIn max-h-[90vh] overflow-y-auto text-black">
         
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        {/* Header (Matching Reference Image 7) */}
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-4">
           <div>
-            <h2 className="text-xl font-extrabold text-slate-900">Booking Confirmation</h2>
-            <p className="text-xs text-slate-500 mt-0.5">Review trip details and driver pricing breakdown</p>
+            <h2 className="text-xl font-black uppercase tracking-wider text-black">CONFIRM YOUR BOOKING</h2>
+            <p className="text-xs text-gray-500 font-medium mt-0.5">Review trip details and driver fare breakdown.</p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 border border-slate-200 transition"
+            className="p-2 rounded-2xl bg-[#F8F8F8] text-gray-500 hover:text-black border border-[#E5E7EB] transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Selected Driver Section */}
-        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-          <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Your Assigned Driver</span>
+        {/* Driver Box */}
+        <div className="bg-[#F8F8F8] p-4 rounded-2xl border border-[#E5E7EB] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <img src={driver.profileImage} alt={driver.name} className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shadow-sm" />
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-extrabold text-slate-900">{driver.name}</h3>
-                <span className="text-xs font-bold text-amber-600">⭐ {driver.rating}</span>
+            <img src={driver.profileImage} alt={driver.name} className="w-14 h-14 rounded-full object-cover border-2 border-gray-200 shadow-xs" />
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-black text-black">{driver.name}</h3>
+                <span className="text-xs font-bold text-amber-600 flex items-center gap-0.5">
+                  ★ {driver.rating}
+                </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">{driver.experienceYears} yrs experience • {driver.totalTrips} completed trips</p>
-              <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 mt-1 font-semibold">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Verified Background & Driving License</span>
-              </div>
+              <p className="text-xs text-gray-500 font-medium mt-0.5">{driver.experienceYears} yrs experience • {driver.totalTrips} trips</p>
             </div>
           </div>
         </div>
 
-        {/* Trip Details */}
-        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 text-xs">
-          <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Trip Route</span>
-          
-          <div className="space-y-2">
-            <div className="flex items-start gap-2">
-              <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+        {/* Trip Box */}
+        <div className="bg-[#F8F8F8] p-4 rounded-2xl border border-[#E5E7EB] space-y-3 text-xs">
+          <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Trip Route</span>
+
+          <div className="space-y-2.5">
+            <div className="flex items-start gap-2.5">
+              <div className="w-3 h-3 rounded-full bg-emerald-600 mt-1 shrink-0"></div>
               <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold">Pickup</p>
-                <p className="font-extrabold text-slate-900">{pickup?.name || pickup}</p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase">Pickup</p>
+                <p className="font-black text-black text-xs sm:text-sm">{pickup?.name || pickup}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-2">
-              <MapPin className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5">
+              <div className="w-3 h-3 rounded-full bg-rose-600 mt-1 shrink-0"></div>
               <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold">Destination</p>
-                <p className="font-extrabold text-slate-900">{destination?.name || destination}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between border-t border-slate-200 pt-2 text-slate-600">
-            <span>Distance: <strong className="text-slate-900 font-extrabold">{metrics.distanceKm} km</strong></span>
-            <span>Duration: <strong className="text-slate-900 font-extrabold">~{metrics.durationMins} min</strong></span>
-          </div>
-        </div>
-
-        {/* Remote Booking Recipient (If Applicable) */}
-        {bookingType === 'REMOTE_BOOKING' && (
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-            <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Remote Booking Recipient</span>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-[10px] text-slate-500 font-bold">Recipient Name</label>
-                <input
-                  type="text"
-                  value={recipientName}
-                  onChange={(e) => setRecipientName(e.target.value)}
-                  placeholder="Grandfather Sharma"
-                  className="w-full bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs text-slate-900 mt-1"
-                />
-              </div>
-              <div>
-                <label className="text-[10px] text-slate-500 font-bold">Recipient Phone for OTP</label>
-                <input
-                  type="text"
-                  value={recipientPhone}
-                  onChange={(e) => setRecipientPhone(e.target.value)}
-                  placeholder="+91 9876543210"
-                  className="w-full bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs text-slate-900 mt-1"
-                />
+                <p className="text-[10px] text-gray-400 font-bold uppercase">Destination</p>
+                <p className="font-black text-black text-xs sm:text-sm">{destination?.name || destination}</p>
               </div>
             </div>
           </div>
-        )}
 
-        {/* Pricing Breakdown */}
-        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2 text-xs">
-          <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Fare Breakdown</span>
-          
-          <div className="space-y-1.5 pt-1">
-            <div className="flex items-center justify-between text-slate-600">
-              <span>Driver Service Fee</span>
-              <span className="font-bold text-slate-900">₹{fare.driverFee}</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-600">
-              <span>Platform Dispatch Fee</span>
-              <span className="font-bold text-slate-900">₹{fare.platformFee}</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-600">
-              <span>GST & Taxes (5%)</span>
-              <span className="font-bold text-slate-900">₹{fare.taxes}</span>
-            </div>
-            <div className="flex items-center justify-between border-t border-slate-200 pt-2 font-extrabold text-sm text-slate-900">
-              <span>Total Payable</span>
-              <span className="text-slate-900 font-extrabold text-base">₹{fare.totalFare}</span>
-            </div>
+          <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-2 text-gray-600 font-medium">
+            <span>Distance: <strong className="text-black font-black">{metrics.distanceKm} km</strong></span>
+            <span>Duration: <strong className="text-black font-black">~{metrics.durationMins} min</strong></span>
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="pt-2 flex items-center justify-between gap-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition flex items-center gap-1.5"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Go Back</span>
-          </button>
+        {/* Vehicle Box */}
+        <div className="bg-[#F8F8F8] p-4 rounded-2xl border border-[#E5E7EB] flex items-center justify-between text-xs">
+          <div>
+            <p className="font-black text-black">Standard Sedan (Honda City)</p>
+            <p className="text-gray-500 font-medium">4 Passengers • Automatic</p>
+          </div>
+          <span className="px-3 py-1 rounded-xl bg-white text-black font-extrabold text-[11px] border border-[#E5E7EB]">
+            Instant Ride
+          </span>
+        </div>
 
+        {/* Pricing Breakdown (Matching Reference Image 7) */}
+        <div className="bg-[#F8F8F8] p-4 rounded-2xl border border-[#E5E7EB] space-y-2 text-xs font-medium">
+          <div className="flex items-center justify-between text-gray-600">
+            <span>Driver Fee</span>
+            <span className="font-extrabold text-black">₹{fare.driverFee}</span>
+          </div>
+          <div className="flex items-center justify-between text-gray-600">
+            <span>Platform Fee</span>
+            <span className="font-extrabold text-black">₹{fare.platformFee}</span>
+          </div>
+          <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-2 font-black text-sm text-black">
+            <span>Total</span>
+            <span className="text-base font-black text-black">₹{fare.totalFare}</span>
+          </div>
+        </div>
+
+        {/* Primary Black CTA Button */}
+        <div className="space-y-2 pt-2">
           <button
             type="button"
             onClick={handleConfirm}
-            className="flex-1 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-md flex items-center justify-center gap-2"
+            className="w-full py-4 bg-black hover:bg-gray-800 text-white font-black text-sm rounded-2xl transition shadow-md flex items-center justify-center gap-2"
           >
-            <span>Confirm Booking & Pay ₹{fare.totalFare}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>CONFIRM BOOKING →</span>
           </button>
         </div>
 

@@ -16,7 +16,7 @@ export const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-slate-900 selection:text-white font-sans">
+      <div className="min-h-screen flex flex-col bg-[#F8F8F8] text-[#111111] selection:bg-black selection:text-white font-sans">
         
         {/* Navigation Topbar */}
         <Navbar

@@ -73,21 +73,21 @@ export const VehicleServiceSelector: React.FC<VehicleServiceSelectorProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      {/* Header: Title & View All Link (Matching Reference Image) */}
+      {/* Minimal Header */}
       <div className="flex items-center justify-between px-1">
-        <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-          Select Vehicle Category
+        <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-gray-500">
+          Choose Your Vehicle Type
         </h3>
         <button
           type="button"
-          className="text-xs font-bold text-[#004d40] hover:text-emerald-700 flex items-center gap-0.5 transition"
+          className="text-xs font-bold text-black hover:underline flex items-center gap-0.5 transition"
         >
           <span>View All</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Responsive Horizontal Scroll / Cards Grid (Matching Reference Image) */}
+      {/* Grid of Minimal Monochrome Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
         {VEHICLE_CATEGORIES.map((cat) => {
           const isSelected = selectedCategory.id === cat.id;
@@ -99,40 +99,40 @@ export const VehicleServiceSelector: React.FC<VehicleServiceSelectorProps> = ({
               onClick={() => onSelectCategory(cat)}
               className={`relative bg-white rounded-3xl p-4 cursor-pointer transition-all flex flex-col justify-between h-56 text-left border ${
                 isSelected
-                  ? 'border-2 border-emerald-600 shadow-lg shadow-emerald-600/10 ring-1 ring-emerald-600/20'
-                  : 'border-slate-200/90 shadow-xs hover:border-slate-300 hover:shadow-sm'
+                  ? 'border-2 border-black bg-[#F8F8F8]/60 shadow-md ring-1 ring-black/10'
+                  : 'border-[#E5E7EB] shadow-xs hover:border-gray-400'
               }`}
             >
-              {/* Checkmark Badge on Selected Card (Top Right) */}
+              {/* Checkmark Badge on Selected State */}
               {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs z-10 animate-fadeIn">
+                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-black text-white flex items-center justify-center shadow-xs z-10 animate-fadeIn">
                   <Check className="w-3.5 h-3.5 stroke-[3]" />
                 </div>
               )}
 
               {/* Car Image Preview */}
-              <div className="w-full h-24 rounded-2xl bg-slate-50 border border-slate-100 overflow-hidden mb-2 flex items-center justify-center relative">
+              <div className="w-full h-24 rounded-2xl bg-[#F8F8F8] border border-[#E5E7EB] overflow-hidden mb-2 flex items-center justify-center">
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  className="w-full h-full object-cover transition duration-300"
                 />
               </div>
 
-              {/* Card Details */}
+              {/* Specs & Pricing */}
               <div className="space-y-1">
-                <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                <h4 className="text-xs sm:text-sm font-black text-black truncate">
                   {cat.name}
                 </h4>
-                <p className="text-[10px] sm:text-xs text-slate-500 font-medium">
+                <p className="text-[10px] sm:text-xs text-gray-500 font-medium">
                   {cat.capacity} • {cat.transmission === 'AUTOMATIC' ? 'Automatic' : 'Manual'}
                 </p>
 
-                <div className="pt-1.5 flex items-baseline justify-between border-t border-slate-100">
-                  <span className="text-sm sm:text-base font-black text-slate-900">
+                <div className="pt-1.5 flex items-baseline justify-between border-t border-[#E5E7EB]">
+                  <span className="text-sm sm:text-base font-black text-black">
                     ₹{estPrice}
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-400 truncate max-w-[80px]">
+                  <span className="text-[10px] font-semibold text-gray-400 truncate max-w-[80px]">
                     {cat.carModel}
                   </span>
                 </div>

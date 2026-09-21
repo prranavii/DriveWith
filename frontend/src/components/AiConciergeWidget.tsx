@@ -4,11 +4,12 @@ import { aiApi } from '../api/client';
 import { useAppStore } from '../store/useAppStore';
 
 interface AiConciergeWidgetProps {
-  onBookingCreated: (booking: any) => void;
-  onOpenPassport: (driver: any) => void;
+  onBookingCreated?: (booking: any) => void;
+  onOpenPassport?: (driver: any) => void;
+  onClose?: () => void;
 }
 
-export const AiConciergeWidget: React.FC<AiConciergeWidgetProps> = ({ onBookingCreated, onOpenPassport }) => {
+export const AiConciergeWidget: React.FC<AiConciergeWidgetProps> = ({ onBookingCreated, onOpenPassport, onClose }) => {
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -34,7 +35,7 @@ export const AiConciergeWidget: React.FC<AiConciergeWidgetProps> = ({ onBookingC
         created_at: new Date().toISOString(),
       });
 
-      if (data.bookingCreated && data.booking) {
+      if (data.bookingCreated && data.booking && onBookingCreated) {
         onBookingCreated(data.booking);
       }
     } catch (err) {
@@ -144,7 +145,7 @@ export const AiConciergeWidget: React.FC<AiConciergeWidgetProps> = ({ onBookingC
               <div className="pt-2 flex items-center justify-between border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={() => onOpenPassport(result.selectedDriver)}
+                  onClick={() => onOpenPassport && onOpenPassport(result.selectedDriver)}
                   className="text-xs text-slate-900 hover:underline font-bold flex items-center gap-1"
                 >
                   <UserCheck className="w-3.5 h-3.5" />

@@ -1,5 +1,26 @@
 import React, { useState } from 'react';
-import { Search, ArrowLeft, ChevronRight, SlidersHorizontal, AlertCircle, RefreshCw, Car, ShieldCheck, Sparkles, X } from 'lucide-react';
+import {
+  Search,
+  ArrowLeft,
+  ChevronRight,
+  SlidersHorizontal,
+  AlertCircle,
+  RefreshCw,
+  Car,
+  ShieldCheck,
+  Sparkles,
+  X,
+  Home as HomeIcon,
+  Calendar,
+  User,
+  Shield,
+  Zap,
+  Clock,
+  MapPin,
+  CheckCircle,
+  Signal,
+  ArrowUpRight,
+} from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
 import { LocationItem, POPULAR_LOCATIONS } from '../services/locationService';
@@ -10,7 +31,6 @@ import { BookingRecord } from '../services/bookingService';
 import { ConnectedRouteInputCard } from '../components/ConnectedRouteInputCard';
 import { VehicleServiceSelector, VEHICLE_CATEGORIES, VehicleCategory } from '../components/VehicleServiceSelector';
 import { MapView } from '../components/MapView';
-import { TripSummaryCard } from '../components/TripSummaryCard';
 import { DriverCard } from '../components/DriverCard';
 import { DriverReportModal } from '../components/DriverReportModal';
 import { DriverComparisonModal } from '../components/DriverComparisonModal';
@@ -23,6 +43,7 @@ export const CustomerDashboard: React.FC = () => {
   // Step State: LOCATION_SELECTION -> DRIVER_SEARCH -> BOOKING_SUCCESS
   const [step, setStep] = useState<'LOCATION_SELECTION' | 'DRIVER_SEARCH' | 'BOOKING_SUCCESS'>('LOCATION_SELECTION');
   const [showAiConcierge, setShowAiConcierge] = useState(false);
+  const [showTraffic, setShowTraffic] = useState(false);
 
   // Location & Trip State
   const [pickupText, setPickupText] = useState('Sector 62, Noida, UP');
@@ -82,6 +103,7 @@ export const CustomerDashboard: React.FC = () => {
 
   const handleConfirmBookingRecord = (record: BookingRecord) => {
     setConfirmedBooking(record);
+    setActiveBooking(record);
     setSummaryDriver(null);
     setStep('BOOKING_SUCCESS');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -100,8 +122,20 @@ export const CustomerDashboard: React.FC = () => {
       return b.rating * b.totalTrips - a.rating * a.totalTrips; // Recommended score
     });
 
+  const tripModes = [
+    { id: 'mode-instant', title: 'Instant Ride', desc: 'Drive now', icon: Zap },
+    { id: 'mode-scheduled', title: 'Scheduled Ride', desc: 'Plan ahead', icon: Calendar },
+    { id: 'mode-hourly', title: 'Hourly Driver', desc: 'By the hour', icon: Clock },
+    { id: 'mode-outstation', title: 'Outstation', desc: 'Long distance', icon: Car },
+  ];
+
+  const recentBookings = [
+    { id: 'b1', route: 'Sector 62, Noida → DLF Cyber City, Gurgaon', fare: 630, status: 'Completed', date: 'Yesterday' },
+    { id: 'b2', route: 'Sector 62, Noida → IGI Airport T3, Delhi', fare: 720, status: 'Completed', date: '14 Sep 2026' },
+  ];
+
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-8 pb-20 sm:pb-8 text-black bg-[#F8F8F8] min-h-screen">
       
       {/* Confirmed Booking View */}
       {step === 'BOOKING_SUCCESS' && confirmedBooking && (
@@ -116,28 +150,52 @@ export const CustomerDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Step 1: LOCATION SELECTION & MAP-FIRST RIDE BOOKING (Matching Visual Reference Image) */}
+      {/* Step 1: LOCATION SELECTION & AI-NATIVE HERO EXPERIENCE */}
       {step === 'LOCATION_SELECTION' && (
-        <div className="relative w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 pb-8 space-y-6">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-8">
           
-          {/* Top Map-First Canvas Container */}
-          <div className="relative w-full h-[460px] sm:h-[520px] lg:h-[580px] rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-100">
+          {/* Section 1: Hero Experience Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            {/* Interactive Leaflet Map Background */}
-            <div className="absolute inset-0 w-full h-full z-0">
-              <MapView
-                pickupLoc={pickupLoc}
-                destLoc={destLoc}
-                drivers={availableDrivers}
-                routePolyline={tripMetrics.routePolyline}
-                heightClass="h-full w-full"
-                distanceKm={tripMetrics.distanceKm}
-                durationMins={tripMetrics.durationMins}
-              />
-            </div>
+            {/* Left Hero Branding & Dual-Mode Booking Card (5 Cols Desktop) */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Hero Headlines */}
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black text-white text-[11px] font-bold">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Minimal Monochrome 2.0</span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tight leading-tight">
+                  Same Car. <br />
+                  <span className="text-neutral-500">A Smarter Journey.</span>
+                </h1>
+                <p className="text-xs sm:text-sm text-neutral-600 font-medium leading-relaxed">
+                  Professional drivers for your own vehicle. Safe. Reliable. On-Demand.
+                </p>
 
-            {/* Floating Booking Panel Overlay (Positioned Over Map - Matching Reference Image) */}
-            <div className="absolute top-3 left-3 right-3 sm:top-5 sm:left-5 sm:max-w-md lg:max-w-lg z-20 pointer-events-auto">
+                {/* 4 Feature Badges */}
+                <div className="grid grid-cols-2 gap-2 pt-1 text-xs font-bold text-black">
+                  <div className="flex items-center gap-2 bg-white p-2.5 rounded-2xl border border-[#E5E7EB] shadow-xs">
+                    <ShieldCheck className="w-4 h-4 text-black" />
+                    <span>Verified Drivers</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-2.5 rounded-2xl border border-[#E5E7EB] shadow-xs">
+                    <Signal className="w-4 h-4 text-black" />
+                    <span>Real-time Tracking</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-2.5 rounded-2xl border border-[#E5E7EB] shadow-xs">
+                    <Sparkles className="w-4 h-4 text-black" />
+                    <span>AI Trip Assistant</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-2.5 rounded-2xl border border-[#E5E7EB] shadow-xs">
+                    <Car className="w-4 h-4 text-black" />
+                    <span>Your Car, Your Comfort</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Dual-Mode Booking Card */}
               <ConnectedRouteInputCard
                 pickupValue={pickupText}
                 destValue={destText}
@@ -163,12 +221,91 @@ export const CustomerDashboard: React.FC = () => {
                 serviceType={bookingType === 'SCHEDULE' ? 'Schedule' : 'Instant Ride'}
                 onServiceTypeChange={(val) => setBookingType(val === 'Schedule' ? 'SCHEDULE' : 'NORMAL')}
                 onFindDrivers={handleFindDrivers}
+                onOpenAiConcierge={() => setShowAiConcierge(true)}
               />
+
+              {/* Hero Banner */}
+              <div className="rounded-2xl border border-[#E5E7EB] bg-black p-5 text-white flex items-center justify-between">
+                <div className="space-y-1">
+                  <p className="text-sm font-bold">"You drive life. We'll handle the rest."</p>
+                  <p className="text-[11px] text-neutral-400 font-medium">On-demand verified personal drivers</p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-700 flex items-center justify-center font-bold text-lg shrink-0">
+                  🚘
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Immersive Leaflet Map Canvas (7 Cols Desktop) */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="relative w-full h-[520px] sm:h-[600px] lg:h-[660px] rounded-3xl overflow-hidden border border-[#E5E7EB] shadow-sm bg-neutral-100">
+                <MapView
+                  pickupLoc={pickupLoc}
+                  destLoc={destLoc}
+                  drivers={availableDrivers}
+                  routePolyline={tripMetrics.routePolyline}
+                  heightClass="h-full w-full"
+                  distanceKm={tripMetrics.distanceKm}
+                  durationMins={tripMetrics.durationMins}
+                />
+
+                {/* Live Traffic Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowTraffic(!showTraffic)}
+                  className={`absolute bottom-6 right-6 z-10 px-3.5 py-2 rounded-xl border shadow-md text-xs font-bold flex items-center gap-1.5 transition ${
+                    showTraffic
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-black border-[#E5E7EB] hover:bg-neutral-50'
+                  }`}
+                >
+                  <Signal className="w-3.5 h-3.5" />
+                  <span>Live Traffic</span>
+                </button>
+              </div>
             </div>
 
           </div>
 
-          {/* Select Vehicle Category Section (Matching Reference Image) */}
+          {/* Section: Choose Your Trip Mode */}
+          <div className="space-y-4 pt-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg sm:text-xl font-black text-black tracking-tight">Choose Your Trip Mode</h3>
+                <p className="text-xs text-neutral-500 font-medium">Flexible options for every journey.</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              {tripModes.map((mode) => {
+                const Icon = mode.icon;
+                const isSelected = (mode.id === 'mode-instant' && bookingType === 'NORMAL') || (mode.id === 'mode-scheduled' && bookingType === 'SCHEDULE');
+                return (
+                  <div
+                    key={mode.id}
+                    onClick={() => {
+                      if (mode.id === 'mode-instant') setBookingType('NORMAL');
+                      if (mode.id === 'mode-scheduled') setBookingType('SCHEDULE');
+                    }}
+                    className={`bg-white border rounded-2xl p-4 shadow-xs transition-all cursor-pointer space-y-2 text-left group ${
+                      isSelected ? 'border-black ring-1 ring-black' : 'border-[#E5E7EB] hover:border-black'
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-neutral-100 border border-[#E5E7EB] flex items-center justify-center group-hover:bg-black group-hover:text-white transition">
+                      <Icon className="w-5 h-5 text-black group-hover:text-white transition" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs sm:text-sm font-bold text-black">{mode.title}</h4>
+                      <p className="text-[11px] text-neutral-500 font-medium mt-0.5">{mode.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Select Vehicle Category Section */}
           <div className="pt-2">
             <VehicleServiceSelector
               selectedCategory={selectedCategory}
@@ -177,30 +314,79 @@ export const CustomerDashboard: React.FC = () => {
             />
           </div>
 
-          {/* Bottom AI Concierge Card (Matching Reference Image) */}
-          <div className="bg-[#e6f4f1] border border-emerald-100 rounded-3xl p-4 sm:p-5 flex items-center justify-between gap-4 shadow-xs">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-[#004d40] flex items-center justify-center shrink-0">
-                <Sparkles className="w-5.5 h-5.5 font-bold" />
+          {/* AI Concierge Banner */}
+          <div className="bg-white border border-[#E5E7EB] rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs relative overflow-hidden">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
+                🤖
               </div>
-              <div>
-                <h4 className="text-sm font-extrabold text-[#004d40]">
+              <div className="space-y-1">
+                <h4 className="text-base sm:text-lg font-bold text-black">
                   Not sure what to enter?
                 </h4>
-                <p className="text-xs text-slate-600 font-medium mt-0.5">
-                  Let our AI assistant fill the details for you.
+                <p className="text-xs text-neutral-600 font-medium">
+                  Let our AI Concierge plan your ride automatically.
                 </p>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  <span className="text-[10px] bg-neutral-100 px-2.5 py-1 rounded-full border border-neutral-200 font-bold text-black">"Take my parents to airport"</span>
+                  <span className="text-[10px] bg-neutral-100 px-2.5 py-1 rounded-full border border-neutral-200 font-bold text-black">"Driver for full day in Delhi"</span>
+                </div>
               </div>
             </div>
 
             <button
               type="button"
               onClick={() => setShowAiConcierge(true)}
-              className="bg-white hover:bg-slate-50 text-[#004d40] border border-slate-200/90 shadow-sm px-4.5 py-2.5 rounded-2xl font-extrabold text-xs flex items-center gap-1 shrink-0 transition hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-black hover:bg-neutral-800 text-white shadow-sm px-5 py-3 rounded-2xl font-bold text-xs flex items-center gap-1.5 shrink-0 transition"
             >
-              <span>Ask AI</span>
-              <ChevronRight className="w-4 h-4 text-[#004d40]" />
+              <Sparkles className="w-4 h-4 text-white" />
+              <span>Ask DriveWith AI →</span>
             </button>
+          </div>
+
+          {/* Trust Proof Banner */}
+          <div className="bg-white border border-[#E5E7EB] rounded-3xl p-6 sm:p-8 shadow-xs text-center space-y-6">
+            <div className="space-y-1">
+              <h3 className="text-xl sm:text-2xl font-black text-black">"Same Roads. Better Stories."</h3>
+              <p className="text-xs text-neutral-500 font-medium">Trusted mobility platform for personal vehicle owners across NCR</p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+              <div className="space-y-0.5">
+                <div className="text-2xl font-black text-black">10K+</div>
+                <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Happy Users</p>
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-2xl font-black text-black">4.8★</div>
+                <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Avg. Rating</p>
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-2xl font-black text-black">25+</div>
+                <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Cities Supported</p>
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-2xl font-black text-black">100%</div>
+                <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Verified Drivers</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Trips List */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-base font-bold text-black">Recent Trips</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {recentBookings.map((b) => (
+                <div key={b.id} className="bg-white border border-[#E5E7EB] rounded-2xl p-4 shadow-xs flex items-center justify-between text-xs">
+                  <div className="space-y-0.5">
+                    <p className="font-bold text-black">{b.route}</p>
+                    <p className="text-[11px] text-neutral-500 font-medium">{b.date} • ₹{b.fare}</p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-neutral-100 text-black border border-neutral-200">
+                    {b.status}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Vehicle Inspection AI Widget */}
@@ -211,21 +397,21 @@ export const CustomerDashboard: React.FC = () => {
 
       {/* Step 2: DRIVER SEARCH / DISCOVERY PAGE */}
       {step === 'DRIVER_SEARCH' && (
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6 animate-fadeIn text-slate-900">
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6 animate-fadeIn text-black">
           
           {/* Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E7EB] p-5 rounded-3xl shadow-xs">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setStep('LOCATION_SELECTION')}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition"
+                className="p-2.5 rounded-2xl bg-neutral-100 hover:bg-neutral-200 text-black border border-neutral-200 transition"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900">Available Drivers Near You</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Verified drivers matched to your trip ({tripMetrics.distanceKm} km · ~{tripMetrics.durationMins} min)
+                <h2 className="text-xl sm:text-2xl font-black text-black">Drivers Near You</h2>
+                <p className="text-xs text-neutral-500 font-medium mt-0.5">
+                  {filteredDrivers.length} verified drivers available ({tripMetrics.distanceKm} km · ~{tripMetrics.durationMins} min)
                 </p>
               </div>
             </div>
@@ -233,7 +419,7 @@ export const CustomerDashboard: React.FC = () => {
             {selectedDriversForCompare.length > 0 && (
               <button
                 onClick={() => setShowComparisonModal(true)}
-                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5"
+                className="px-4 py-2.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs rounded-2xl shadow-sm transition flex items-center gap-1.5"
               >
                 <span>Compare {selectedDriversForCompare.length} Drivers</span>
                 <ChevronRight className="w-4 h-4" />
@@ -242,102 +428,113 @@ export const CustomerDashboard: React.FC = () => {
           </div>
 
           {/* Filters Toolbar */}
-          <div className="bg-white border border-slate-200 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 text-xs shadow-xs">
+          <div className="bg-white border border-[#E5E7EB] p-4 rounded-3xl flex flex-wrap items-center justify-between gap-4 text-xs shadow-xs">
             <div className="flex items-center gap-3">
-              <span className="font-bold text-slate-600 flex items-center gap-1">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-900" /> Transmission:
+              <span className="font-bold text-neutral-600 flex items-center gap-1">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-black" /> Transmission:
               </span>
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <div className="flex items-center gap-1 bg-neutral-100 p-1 rounded-xl border border-neutral-200 font-bold">
                 {['ALL', 'AUTOMATIC', 'MANUAL'].map((t) => (
                   <button
                     key={t}
                     onClick={() => setFilterTransmission(t)}
-                    className={`px-3 py-1 rounded-lg text-[11px] font-bold transition ${
-                      filterTransmission === t ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    className={`px-3 py-1 rounded-lg transition ${
+                      filterTransmission === t
+                        ? 'bg-black text-white shadow-xs'
+                        : 'text-neutral-600 hover:text-black'
                     }`}
                   >
-                    {t}
+                    {t === 'ALL' ? 'All' : t === 'AUTOMATIC' ? 'Automatic' : 'Manual'}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-600">Sort By:</span>
+            <div className="flex items-center gap-2 font-bold">
+              <span className="text-neutral-500">Sort by:</span>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-slate-50 border border-slate-200 text-slate-900 text-xs px-3 py-1.5 rounded-xl focus:outline-none focus:border-slate-900 font-semibold"
+                onChange={(e: any) => setSortBy(e.target.value)}
+                className="bg-neutral-100 border border-neutral-200 rounded-xl px-3 py-1.5 text-xs text-black focus:outline-none cursor-pointer font-bold"
               >
-                <option value="RECOMMENDED">Recommended Match Score</option>
-                <option value="PRICE">Price: Low to High</option>
-                <option value="ETA">Fastest ETA</option>
+                <option value="RECOMMENDED">Best Match</option>
+                <option value="PRICE">Lowest Price</option>
+                <option value="ETA">Nearest (Fastest ETA)</option>
                 <option value="RATING">Highest Rating</option>
               </select>
             </div>
           </div>
 
-          {/* Driver Cards Grid */}
-          {filteredDrivers.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredDrivers.map((driver) => (
-                <DriverCard
-                  key={driver.id}
-                  driver={driver}
-                  isCompared={Boolean(selectedDriversForCompare.find((d) => d.id === driver.id))}
-                  onToggleCompare={handleToggleCompare}
-                  onViewReport={(drv) => setReportDriver(drv)}
-                  onSelectDriver={(drv) => setSummaryDriver(drv)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-4 shadow-sm">
-              <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
-              <h3 className="text-lg font-bold text-slate-900">No drivers available nearby matching your criteria</h3>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Try expanding your search parameters or resetting filters.
-              </p>
-              <button
-                onClick={() => setFilterTransmission('ALL')}
-                className="px-4 py-2 bg-slate-900 text-white font-bold text-xs rounded-xl shadow-md"
-              >
-                Reset Filters
-              </button>
-            </div>
-          )}
+          {/* Driver Discovery Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredDrivers.map((driver, index) => (
+              <DriverCard
+                key={driver.id}
+                driver={driver}
+                isCompared={!!selectedDriversForCompare.find((d) => d.id === driver.id)}
+                onToggleCompare={handleToggleCompare}
+                onViewReport={(drv) => setReportDriver(drv)}
+                onSelectDriver={(drv) => setSummaryDriver(drv)}
+                isTopMatch={index === 0}
+              />
+            ))}
+          </div>
 
         </div>
       )}
 
-      {/* Driver Report Profile Modal */}
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#E5E7EB] px-6 py-2 flex items-center justify-between text-[10px] font-bold text-black shadow-lg">
+        <button
+          onClick={() => setStep('LOCATION_SELECTION')}
+          className={`flex flex-col items-center gap-0.5 ${step === 'LOCATION_SELECTION' ? 'text-black' : 'text-neutral-400'}`}
+        >
+          <HomeIcon className="w-5 h-5" />
+          <span>Home</span>
+        </button>
+        <button
+          onClick={() => setStep('DRIVER_SEARCH')}
+          className={`flex flex-col items-center gap-0.5 ${step === 'DRIVER_SEARCH' ? 'text-black' : 'text-neutral-400'}`}
+        >
+          <Calendar className="w-5 h-5" />
+          <span>Bookings</span>
+        </button>
+        <button
+          onClick={() => setShowAiConcierge(true)}
+          className="flex flex-col items-center gap-0.5 text-black"
+        >
+          <Sparkles className="w-5 h-5 text-black" />
+          <span>AI</span>
+        </button>
+        <button
+          onClick={() => setStep('LOCATION_SELECTION')}
+          className="flex flex-col items-center gap-0.5 text-neutral-400"
+        >
+          <User className="w-5 h-5" />
+          <span>Profile</span>
+        </button>
+      </div>
+
+      {/* Modals & Dialogs */}
+      {showAiConcierge && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="max-w-2xl w-full">
+            <AiConciergeWidget onClose={() => setShowAiConcierge(false)} />
+          </div>
+        </div>
+      )}
+
       {reportDriver && (
         <DriverReportModal
           driver={reportDriver}
           onClose={() => setReportDriver(null)}
           onSelectDriver={(drv) => {
+            setSummaryDriver(drv);
             setReportDriver(null);
-            setSummaryDriver(drv);
           }}
         />
       )}
 
-      {/* Driver Comparison Modal */}
-      {showComparisonModal && (
-        <DriverComparisonModal
-          drivers={selectedDriversForCompare}
-          onClose={() => setShowComparisonModal(false)}
-          onSelectDriver={(drv) => {
-            setShowComparisonModal(false);
-            setSummaryDriver(drv);
-          }}
-          onRemoveFromCompare={(id) =>
-            setSelectedDriversForCompare(selectedDriversForCompare.filter((d) => d.id !== id))
-          }
-        />
-      )}
-
-      {/* Booking Summary Confirmation Modal */}
       {summaryDriver && (
         <BookingSummaryModal
           driver={summaryDriver}
@@ -350,25 +547,18 @@ export const CustomerDashboard: React.FC = () => {
         />
       )}
 
-      {/* AI Concierge Modal */}
-      {showAiConcierge && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setShowAiConcierge(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <AiConciergeWidget
-              onBookingCreated={(b) => {
-                setActiveBooking(b);
-                setShowAiConcierge(false);
-              }}
-              onOpenPassport={(d) => setReportDriver(d as any)}
-            />
-          </div>
-        </div>
+      {showComparisonModal && (
+        <DriverComparisonModal
+          drivers={selectedDriversForCompare}
+          onClose={() => setShowComparisonModal(false)}
+          onSelectDriver={(drv) => {
+            setSummaryDriver(drv);
+            setShowComparisonModal(false);
+          }}
+          onRemoveFromCompare={(driverId) => {
+            setSelectedDriversForCompare(selectedDriversForCompare.filter((d) => d.id !== driverId));
+          }}
+        />
       )}
 
     </div>

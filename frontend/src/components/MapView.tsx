@@ -13,9 +13,9 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Custom Icons for Pickup (Green), Destination (Red), and Drivers (Purple)
+// Custom Minimal Black/Green/Red Pin Markers
 const pickupIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -33,7 +33,7 @@ const destIcon = new L.Icon({
 });
 
 const driverIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
   iconSize: [22, 36],
   iconAnchor: [11, 36],
@@ -95,7 +95,7 @@ export const MapView: React.FC<MapViewProps> = ({
   const bounds = L.latLngBounds(allCoords);
 
   return (
-    <div className={`relative overflow-hidden bg-slate-100 ${heightClass}`}>
+    <div className={`relative overflow-hidden bg-[#F8F8F8] ${heightClass}`}>
       
       {/* Map Tile Layer */}
       <MapContainer center={pickupCoords} zoom={12} className="h-full w-full z-0" zoomControl={false}>
@@ -110,9 +110,9 @@ export const MapView: React.FC<MapViewProps> = ({
         {/* Pickup Marker */}
         <Marker position={pickupCoords} icon={pickupIcon}>
           <Popup>
-            <div className="text-xs">
-              <span className="font-bold text-emerald-700">Pickup Location</span>
-              <p className="text-slate-800 text-[11px]">{pickupLoc.name}</p>
+            <div className="text-xs font-black">
+              <span className="text-black">Pickup Location</span>
+              <p className="text-gray-700 text-[11px] font-medium">{pickupLoc.name}</p>
             </div>
           </Popup>
         </Marker>
@@ -121,17 +121,17 @@ export const MapView: React.FC<MapViewProps> = ({
         {destCoords && (
           <Marker position={destCoords} icon={destIcon}>
             <Popup>
-              <div className="text-xs">
-                <span className="font-bold text-rose-700">Destination</span>
-                <p className="text-slate-800 text-[11px]">{destLoc?.name}</p>
+              <div className="text-xs font-black">
+                <span className="text-rose-600">Destination</span>
+                <p className="text-gray-700 text-[11px] font-medium">{destLoc?.name}</p>
               </div>
             </Popup>
           </Marker>
         )}
 
-        {/* Route Polyline (Matching Reference Image 1: Vibrant Blue Line) */}
+        {/* Solid Black Route Line (Matching Reference Images 4, 6, 7) */}
         {destCoords && routePolyline.length > 0 && (
-          <Polyline positions={routePolyline} color="#2563eb" weight={5} opacity={0.95} />
+          <Polyline positions={routePolyline} color="#000000" weight={5} opacity={0.95} />
         )}
 
         {/* Nearby Drivers Markers */}
@@ -142,9 +142,9 @@ export const MapView: React.FC<MapViewProps> = ({
             <Marker key={drv.id} position={[drvLat, drvLng]} icon={driverIcon}>
               <Popup>
                 <div className="text-xs space-y-1">
-                  <div className="font-bold text-slate-900">{drv.name}</div>
-                  <div className="text-amber-600 font-bold">⭐ {drv.rating} • {drv.distanceKm} km away</div>
-                  <div className="text-teal-700 text-[10px] font-semibold">₹{drv.estimatedPrice} estimated</div>
+                  <div className="font-bold text-black">{drv.name}</div>
+                  <div className="text-amber-600 font-bold">★ {drv.rating} • {drv.distanceKm} km away</div>
+                  <div className="text-black text-[10px] font-semibold">₹{drv.estimatedPrice} estimated</div>
                 </div>
               </Popup>
             </Marker>
@@ -152,42 +152,42 @@ export const MapView: React.FC<MapViewProps> = ({
         })}
       </MapContainer>
 
-      {/* Floating Distance & Travel Time Pill (Matching Reference Image) */}
+      {/* Floating Route Summary Pill (Matching Reference Images 4 & 7) */}
       {destLoc && (
-        <div className="absolute bottom-6 left-6 z-10 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-full border border-slate-200/90 shadow-xl text-xs font-extrabold text-slate-900 flex items-center gap-3 animate-fadeIn">
+        <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-full border border-[#E5E7EB] shadow-md text-xs font-black text-black flex items-center gap-3 animate-fadeIn">
           <div className="flex items-center gap-1.5">
-            <Car className="w-4 h-4 text-slate-700" />
+            <Car className="w-4 h-4 text-black" />
             <span>{distanceKm} km</span>
           </div>
-          <span className="text-slate-300">•</span>
+          <span className="text-gray-300">•</span>
           <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-slate-700" />
+            <Clock className="w-4 h-4 text-black" />
             <span>{durationMins} min</span>
           </div>
         </div>
       )}
 
-      {/* Floating Map Actions (Matching Reference Image: Locate Target & Zoom +/- Buttons) */}
-      <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-2.5">
+      {/* Minimal Map Controls (Locate Target & Zoom buttons) */}
+      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         <button
           type="button"
-          className="w-10 h-10 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200 shadow-xl text-slate-800 hover:text-slate-950 flex items-center justify-center transition active:scale-95"
+          className="w-10 h-10 rounded-2xl bg-white/95 backdrop-blur-md border border-[#E5E7EB] shadow-md text-black flex items-center justify-center transition hover:bg-gray-100"
           title="Current Location"
         >
-          <Navigation className="w-4.5 h-4.5 text-slate-800" />
+          <Navigation className="w-4 h-4 text-black" />
         </button>
 
-        <div className="flex flex-col bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl shadow-xl overflow-hidden divide-y divide-slate-100">
+        <div className="flex flex-col bg-white/95 backdrop-blur-md border border-[#E5E7EB] rounded-2xl shadow-md overflow-hidden divide-y divide-gray-100">
           <button
             type="button"
-            className="w-10 h-10 text-slate-800 hover:text-slate-950 flex items-center justify-center transition active:bg-slate-100"
+            className="w-10 h-10 text-black hover:bg-gray-100 flex items-center justify-center transition"
             title="Zoom In"
           >
             <Plus className="w-4 h-4" />
           </button>
           <button
             type="button"
-            className="w-10 h-10 text-slate-800 hover:text-slate-950 flex items-center justify-center transition active:bg-slate-100"
+            className="w-10 h-10 text-black hover:bg-gray-100 flex items-center justify-center transition"
             title="Zoom Out"
           >
             <Minus className="w-4 h-4" />
