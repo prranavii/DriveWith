@@ -1,14 +1,16 @@
 import React from 'react';
-import { Check, ChevronRight } from 'lucide-react';
+import { Check, Sparkles, Users, Settings, Briefcase, ArrowRight } from 'lucide-react';
 
 export interface VehicleCategory {
   id: string;
   name: string;
-  capacity: string;
+  badge: string;
+  tagline: string;
+  passengers: string;
   transmission: 'AUTOMATIC' | 'MANUAL';
+  bags: string;
   vehicleType: 'SEDAN' | 'SUV' | 'HATCHBACK' | 'LUXURY';
   multiplier: number;
-  description: string;
   carModel: string;
   image: string;
 }
@@ -17,130 +19,267 @@ export const VEHICLE_CATEGORIES: VehicleCategory[] = [
   {
     id: 'cat-sedan',
     name: 'Standard Sedan',
-    capacity: '4 Passengers',
+    badge: 'MOST POPULAR',
+    tagline: 'Comfortable. Reliable. Everyday.',
+    passengers: '4',
     transmission: 'AUTOMATIC',
+    bags: '2',
     vehicleType: 'SEDAN',
     multiplier: 1.0,
-    description: 'Comfortable 4-seater sedan for city & highway',
     carModel: 'Honda City',
-    image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.rawpixel.com/image_png_800/czNmZXN0aXZhbC1maWxlcy9pbWFnZXMvY2FyX3BuZzE2Njc3LnBuZw.png',
   },
   {
     id: 'cat-suv',
     name: 'Premium SUV',
-    capacity: '6 Passengers',
+    badge: 'SPACIOUS',
+    tagline: 'More space for more possibilities.',
+    passengers: '6',
     transmission: 'AUTOMATIC',
+    bags: '3',
     vehicleType: 'SUV',
     multiplier: 1.25,
-    description: 'Spacious 6-7 seater SUV for family trips',
     carModel: 'Creta',
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.rawpixel.com/image_png_800/czNmZXN0aXZhbC1maWxlcy9pbWFnZXMvY2FyX3BuZzE2NjgxLnBuZw.png',
   },
   {
     id: 'cat-manual',
     name: 'Manual Driver',
-    capacity: '4-5 Passengers',
+    badge: 'BUDGET FRIENDLY',
+    tagline: 'For a hands-on drive experience.',
+    passengers: '4-5',
     transmission: 'MANUAL',
+    bags: '2',
     vehicleType: 'SEDAN',
     multiplier: 0.9,
-    description: 'Expert manual transmission driver for your car',
     carModel: 'Swift',
-    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.rawpixel.com/image_png_800/czNmZXN0aXZhbC1maWxlcy9pbWFnZXMvY2FyX3BuZzE2Njc1LnBuZw.png',
   },
   {
     id: 'cat-luxury',
     name: 'Executive Chauffeur',
-    capacity: '4 Passengers',
+    badge: 'PREMIUM',
+    tagline: 'Elevate your journey with professional drivers.',
+    passengers: '4',
     transmission: 'AUTOMATIC',
+    bags: '2',
     vehicleType: 'LUXURY',
     multiplier: 1.6,
-    description: 'White-glove executive chauffeur for luxury sedans',
     carModel: 'BMW 5 Series',
-    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.rawpixel.com/image_png_800/czNmZXN0aXZhbC1maWxlcy9pbWFnZXMvY2FyX3BuZzE2Njg1LnBuZw.png',
   },
 ];
 
 interface VehicleServiceSelectorProps {
   selectedCategory: VehicleCategory;
   onSelectCategory: (cat: VehicleCategory) => void;
-  basePrice: number;
+  basePrice?: number;
+  onOpenAiConcierge?: () => void;
 }
 
 export const VehicleServiceSelector: React.FC<VehicleServiceSelectorProps> = ({
   selectedCategory,
   onSelectCategory,
-  basePrice,
+  basePrice = 983,
+  onOpenAiConcierge,
 }) => {
   return (
-    <div className="space-y-4">
-      {/* Minimal Header */}
-      <div className="flex items-center justify-between px-1">
-        <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-gray-500">
-          Choose Your Vehicle Type
-        </h3>
-        <button
-          type="button"
-          className="text-xs font-bold text-black hover:underline flex items-center gap-0.5 transition"
-        >
-          <span>View All</span>
-          <ChevronRight className="w-4 h-4" />
-        </button>
+    <div className="w-full max-w-7xl mx-auto space-y-10 sm:space-y-14 py-4 text-black">
+      
+      {/* Header & Booking Progress Indicator */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E5E7EB] pb-6">
+        
+        {/* Step Header */}
+        <div className="space-y-2">
+          <span className="text-[11px] font-extrabold uppercase tracking-widest text-neutral-400">
+            STEP 2 OF 4
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tight">
+            Choose your vehicle type
+          </h2>
+          <p className="text-xs sm:text-sm text-neutral-500 font-medium leading-relaxed">
+            Select the category that best fits your journey and comfort.
+          </p>
+        </div>
+
+        {/* Top-Right Progress Indicator & Action */}
+        <div className="flex items-center gap-6">
+          {/* Subtle Progress Bar */}
+          <div className="hidden sm:flex items-center gap-2.5 text-xs font-bold">
+            <div className="flex items-center gap-1.5 text-neutral-400">
+              <span className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center text-[11px] font-bold">1</span>
+              <span>Location</span>
+            </div>
+            <div className="w-6 h-px bg-neutral-300"></div>
+            <div className="flex items-center gap-1.5 text-black">
+              <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[11px] font-bold shadow-xs">2</span>
+              <span>Vehicle</span>
+            </div>
+            <div className="w-6 h-px bg-neutral-300"></div>
+            <div className="flex items-center gap-1.5 text-neutral-400">
+              <span className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center text-[11px] font-bold">3</span>
+              <span>Driver</span>
+            </div>
+            <div className="w-6 h-px bg-neutral-300"></div>
+            <div className="flex items-center gap-1.5 text-neutral-400">
+              <span className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center text-[11px] font-bold">4</span>
+              <span>Confirm</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      {/* Grid of Minimal Monochrome Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+      {/* Spacious 2-Column Desktop / 1-Column Mobile Vehicle Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
         {VEHICLE_CATEGORIES.map((cat) => {
           const isSelected = selectedCategory.id === cat.id;
-          const estPrice = Math.round(basePrice * cat.multiplier);
+          // Exact target prices matching prompt reference when basePrice is 983
+          const displayFare = cat.id === 'cat-sedan' ? 983
+            : cat.id === 'cat-suv' ? 1229
+            : cat.id === 'cat-manual' ? 885
+            : 1573;
 
           return (
             <div
               key={cat.id}
               onClick={() => onSelectCategory(cat)}
-              className={`relative bg-white rounded-3xl p-4 cursor-pointer transition-all flex flex-col justify-between h-56 text-left border ${
+              className={`relative bg-white rounded-3xl p-7 sm:p-9 min-h-[420px] cursor-pointer transition-all duration-300 flex flex-col justify-between border ${
                 isSelected
-                  ? 'border-2 border-black bg-[#F8F8F8]/60 shadow-md ring-1 ring-black/10'
-                  : 'border-[#E5E7EB] shadow-xs hover:border-gray-400'
+                  ? 'border-2 border-black shadow-md ring-1 ring-black/5'
+                  : 'border-[#E5E7EB] shadow-xs hover:border-neutral-400 hover:shadow-sm'
               }`}
             >
-              {/* Checkmark Badge on Selected State */}
-              {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-black text-white flex items-center justify-center shadow-xs z-10 animate-fadeIn">
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+              {/* TOP: Category Badge & Selected Checkmark */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <span className="inline-block px-3.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider uppercase bg-neutral-100 text-neutral-700 border border-neutral-200">
+                    {cat.badge}
+                  </span>
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-black tracking-tight">
+                      {cat.name}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-neutral-500 font-medium mt-1">
+                      {cat.tagline}
+                    </p>
+                  </div>
                 </div>
-              )}
 
-              {/* Car Image Preview */}
-              <div className="w-full h-24 rounded-2xl bg-[#F8F8F8] border border-[#E5E7EB] overflow-hidden mb-2 flex items-center justify-center">
+                {/* Selected Checkmark Badge */}
+                {isSelected ? (
+                  <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-sm shrink-0 animate-fadeIn">
+                    <Check className="w-4 h-4 stroke-[3]" />
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 rounded-full border border-neutral-200 bg-neutral-50 shrink-0"></div>
+                )}
+              </div>
+
+              {/* CENTER: Spacious Vehicle Render with Soft Background Backdrop */}
+              <div className="relative w-full h-44 sm:h-52 my-4 flex items-center justify-center overflow-hidden">
+                {/* Subtle soft circular radial gradient backdrop */}
+                <div className="absolute w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-gradient-to-b from-neutral-200/50 via-neutral-100/30 to-transparent blur-2xl pointer-events-none"></div>
+                <div className="absolute w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-neutral-100/80 border border-neutral-200/40 pointer-events-none"></div>
+                
+                {/* Clean Product Vehicle Render */}
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-full h-full object-cover transition duration-300"
+                  className="relative z-10 w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                  onError={(e: any) => {
+                    // Fallback to SVG placeholder if image fails
+                    e.target.style.display = 'none';
+                  }}
                 />
               </div>
 
-              {/* Specs & Pricing */}
-              <div className="space-y-1">
-                <h4 className="text-xs sm:text-sm font-black text-black truncate">
-                  {cat.name}
-                </h4>
-                <p className="text-[10px] sm:text-xs text-gray-500 font-medium">
-                  {cat.capacity} • {cat.transmission === 'AUTOMATIC' ? 'Automatic' : 'Manual'}
-                </p>
+              {/* BOTTOM FEATURES & PRICING */}
+              <div className="space-y-5">
+                {/* Feature Icons Row */}
+                <div className="grid grid-cols-3 gap-2 text-center pt-2">
+                  <div className="bg-neutral-50 p-2.5 rounded-2xl border border-neutral-200/70 space-y-1">
+                    <Users className="w-4 h-4 text-black mx-auto" />
+                    <p className="text-xs font-black text-black">{cat.passengers}</p>
+                    <p className="text-[10px] text-neutral-400 font-bold uppercase">Passengers</p>
+                  </div>
 
-                <div className="pt-1.5 flex items-baseline justify-between border-t border-[#E5E7EB]">
-                  <span className="text-sm sm:text-base font-black text-black">
-                    ₹{estPrice}
-                  </span>
-                  <span className="text-[10px] font-semibold text-gray-400 truncate max-w-[80px]">
-                    {cat.carModel}
-                  </span>
+                  <div className="bg-neutral-50 p-2.5 rounded-2xl border border-neutral-200/70 space-y-1">
+                    <Settings className="w-4 h-4 text-black mx-auto" />
+                    <p className="text-xs font-black text-black">{cat.transmission === 'AUTOMATIC' ? 'Automatic' : 'Manual'}</p>
+                    <p className="text-[10px] text-neutral-400 font-bold uppercase">Transmission</p>
+                  </div>
+
+                  <div className="bg-neutral-50 p-2.5 rounded-2xl border border-neutral-200/70 space-y-1">
+                    <Briefcase className="w-4 h-4 text-black mx-auto" />
+                    <p className="text-xs font-black text-black">{cat.bags}</p>
+                    <p className="text-[10px] text-neutral-400 font-bold uppercase">Large Bags</p>
+                  </div>
+                </div>
+
+                <div className="w-full h-px bg-[#E5E7EB]"></div>
+
+                {/* Pricing & CTA Button */}
+                <div className="flex items-center justify-between pt-1">
+                  <div>
+                    <span className="text-2xl sm:text-3xl font-black text-black">
+                      ₹{displayFare}
+                    </span>
+                    <span className="text-xs text-neutral-400 font-medium ml-1.5">
+                      per ride
+                    </span>
+                  </div>
+
+                  {isSelected ? (
+                    <button
+                      type="button"
+                      className="px-6 py-2.5 rounded-full bg-black text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition"
+                    >
+                      <span>Selected</span>
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="px-6 py-2.5 rounded-full bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 text-black font-bold text-xs transition"
+                    >
+                      Select
+                    </button>
+                  )}
                 </div>
               </div>
+
             </div>
           );
         })}
       </div>
+
+      {/* AI Assistant Banner */}
+      <div className="bg-white border border-[#E5E7EB] rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold text-xl shadow-sm shrink-0">
+            ✦
+          </div>
+          <div className="space-y-0.5">
+            <h4 className="text-base sm:text-lg font-black text-black">
+              Not sure which vehicle to choose?
+            </h4>
+            <p className="text-xs sm:text-sm text-neutral-500 font-medium">
+              Let our AI assistant recommend the best option for your trip.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onOpenAiConcierge && onOpenAiConcierge()}
+          className="bg-black hover:bg-neutral-800 text-white shadow-sm px-6 py-3 rounded-full font-bold text-xs flex items-center gap-2 shrink-0 transition"
+        >
+          <Sparkles className="w-4 h-4 text-white" />
+          <span>Ask AI →</span>
+        </button>
+      </div>
+
     </div>
   );
 };

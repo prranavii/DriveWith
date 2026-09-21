@@ -306,11 +306,12 @@ export const CustomerDashboard: React.FC = () => {
           </div>
 
           {/* Select Vehicle Category Section */}
-          <div className="pt-2">
+          <div className="pt-4">
             <VehicleServiceSelector
               selectedCategory={selectedCategory}
               onSelectCategory={(cat) => setSelectedCategory(cat)}
               basePrice={tripMetrics.estimatedFareMin}
+              onOpenAiConcierge={() => setShowAiConcierge(true)}
             />
           </div>
 
